@@ -60,11 +60,34 @@ Viterbi assumption based on the idea that each pixel disparity should be close t
 <br />As you can see, the image for each direction is similar but not exactly the same.<br />
 Moreover, you can see that the color "stretches" by the calculation direction.
 
-### Smooth Depth - SGM (all direction combined)
+### Smooth Depth Map - SGM (all direction combined)
 ![image](https://user-images.githubusercontent.com/108329249/178108585-9a2b2106-5e6a-40f9-a1ba-101fa0a93acd.png)
 <br />As you can see the output is awesome!<br />
 We can reconstruct the lamp, the statue, the camera, and the object on the table.<br />
 However, can lose the information of the library and the background, and we can't see the facial features of the statue.
+
+## My Algorithm
+Using the Lp norm metric in order to calculate SSD.<br />
+![image](https://user-images.githubusercontent.com/108329249/178108786-152ccd27-b007-46af-bbb4-8f82c8913eae.png)
+
+Suggeted a new const function for Viterbi algorithm.<br />
+𝐿(𝑑, 𝑐𝑜𝑙) = 𝐶𝑠𝑙𝑖𝑐𝑒(d,col) + 𝑀(𝑑, 𝑐𝑜𝑙) - 𝑚𝑖𝑛{𝐿(:, 𝑐𝑜𝑙 − 1)}<br />
+Where:
+ - 𝐶𝑠𝑙𝑖𝑐𝑒(d,coland min⁡{L(: ,col-1)} are the same as the original.
+ - 𝑀(𝑑, 𝑐𝑜𝑙) = 𝑚𝑖𝑛{ k|𝑑-𝑑'|^p + 𝐿(𝑑', 𝑐𝑜𝑙-1)}<br />
+In this way we give different penalty for each disparity change.
+
+### My Depth Map - New SGM 
+![image](https://user-images.githubusercontent.com/108329249/178110438-296f1975-03fe-4705-ba75-80e992e137a9.png)
+
+<br />In conclusion, this proposed method reproduces the scene in very detail (books/facial features/board).<br />
+The result is good even after one direction, with a bit more tuning we may get the perfect result.<br />
+
+
+
+
+
+
 
 
 
