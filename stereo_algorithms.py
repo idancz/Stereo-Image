@@ -33,7 +33,6 @@ class Algorithms:
         ssdd_tensor = np.zeros((num_of_rows,
                                 num_of_cols,
                                 len(disparity_values)))
-        """INSERT YOUR CODE HERE"""
         x_pad = (win_size//2) + 1 + dsp_range
         y_pad = (win_size//2) + 1
         kernel = np.ones((win_size, win_size))
@@ -70,7 +69,6 @@ class Algorithms:
         """
         # you can erase the label_no_smooth initialization.
         # label_no_smooth = np.zeros((ssdd_tensor.shape[0], ssdd_tensor.shape[1]))
-        """INSERT YOUR CODE HERE"""
         label_no_smooth = np.argmin(ssdd_tensor, axis=2)
         return label_no_smooth
 
@@ -94,7 +92,6 @@ class Algorithms:
             return c_slice
         num_labels, num_of_cols = c_slice.shape[0], c_slice.shape[1]
         l_slice = np.zeros((num_labels, num_of_cols))
-        """INSERT YOUR CODE HERE"""
         l_slice[:, 0] = c_slice[:, 0]
         for col in range(1, num_of_cols):
             min_score = min(l_slice[:, col - 1])
@@ -138,7 +135,6 @@ class Algorithms:
             Dynamic Programming depth estimation matrix of shape HxW.
         """
         l = np.zeros_like(ssdd_tensor)
-        """INSERT YOUR CODE HERE"""
         for row in range(ssdd_tensor.shape[0]):
             l[row] = Algorithms.dp_grade_slice(ssdd_tensor[row].T, p1, p2).T
         return Algorithms.naive_labeling(l)
@@ -181,14 +177,14 @@ class Algorithms:
                 else:
                     i, j = position, w - 1 - abs(r) - position
             elif direction % 4 == 1:
-                i, j = r, position #np.arange(w)
+                i, j = r, position # np.arange(w)
             elif direction % 4 == 2:
                 if r < 0:
                     i, j = position+abs(r), position
                 else:
                     i, j = position, position+abs(r)
             elif direction % 4 == 3:
-                i, j = position, r #np.arange(h)
+                i, j = position, r # np.arange(h)
             directed_score[i, j] = score.T
         return directed_score
 
@@ -223,7 +219,6 @@ class Algorithms:
         num_of_directions = 8
         l = np.zeros_like(ssdd_tensor)
         direction_to_slice = {}
-        """INSERT YOUR CODE HERE"""
         for i in range(1, num_of_directions + 1):
             self.scored_directional[i] = Algorithms.calculate_score_per_direction(ssdd_tensor, i, p1, p2)
             direction_to_slice[i] = Algorithms.naive_labeling(self.scored_directional[i])
@@ -253,7 +248,6 @@ class Algorithms:
         """
         num_of_directions = 8
         l = np.zeros_like(ssdd_tensor)
-        """INSERT YOUR CODE HERE"""
         if self.scored_directional != {}:
             for i in range(1, num_of_directions+1):
                 l += self.scored_directional[i]
@@ -366,7 +360,6 @@ class Bonus:
     def sgm_labeling(self, ssdd_tensor: np.ndarray, k: float, p: float):
         num_of_directions = 8
         l = np.zeros_like(ssdd_tensor)
-        """INSERT YOUR CODE HERE"""
         for i in range(1, num_of_directions+1):
             l += Bonus.calculate_score_per_direction(ssdd_tensor, i, k, p)
             print(f'L{i} finished')
