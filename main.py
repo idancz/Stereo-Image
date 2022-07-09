@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 from stereo_algorithms import Algorithms
+from stereo_algorithms import MyAlg
 
 
 COST1 = 0.5
@@ -34,11 +35,11 @@ def forward_map(left_image, labels):
 def load_data(is_your_data=False):
     # Read the data:
     if is_your_data:
-        left_image = mpimg.imread('my_image_left.png')
-        right_image = mpimg.imread('my_image_right.png')
+        left_image = mpimg.imread('Images/my_image_left.png')
+        right_image = mpimg.imread('Images/my_image_right.png')
     else:
-        left_image = mpimg.imread('image_left.png')
-        right_image = mpimg.imread('image_right.png')
+        left_image = mpimg.imread('Images/image_left.png')
+        right_image = mpimg.imread('Images/image_right.png')
     return left_image, right_image
 
 
@@ -213,8 +214,7 @@ def main():
     plt.show()
 
 
-def bonus():
-    from stereo_algorithms import Bonus
+def new_algorithm():
     global COST1, COST2, WIN_SIZE, DISPARITY_RANGE
     COST1 = 0.1
     COST2 = 0.8
@@ -223,22 +223,22 @@ def bonus():
     K = 0.2
     P_NORM = 1
     POW = 0.5
-    print(f"############### Start Bonus Part 1 ###############")
+    print(f"############### Start New Alg Part 1 ###############")
     left_image, right_image = load_data()
     solution = Algorithms()
-    bon = Bonus()
+    alg = MyAlg()
     tt = tic()
     print(f"Calculate ssd norm L{P_NORM}")
-    my_ssdd = bon.ssd_distance(left_image.astype(np.float64),
+    my_ssdd = alg.ssd_distance(left_image.astype(np.float64),
                                  right_image.astype(np.float64),
                                  win_size=WIN_SIZE,
                                  dsp_range=DISPARITY_RANGE, p=P_NORM)
-    print(f"Bonus SSDD calculation done in {toc(tt):.4f}[seconds]")
+    print(f"New Alg SSDD calculation done in {toc(tt):.4f}[seconds]")
 
     # Construct naive disparity image
     tt = tic()
     label_map = solution.naive_labeling(my_ssdd)
-    print(f"Bonus Naive labeling done in {toc(tt):.4f}[seconds]")
+    print(f"New Alg Naive labeling done in {toc(tt):.4f}[seconds]")
 
     # plot the left image and the estimated depth
     fig = plt.figure()
@@ -247,12 +247,12 @@ def bonus():
     plt.subplot(1, 2, 2)
     plt.imshow(label_map)
     plt.colorbar()
-    plt.title(f'Bonus Naive Depth Norm L{P_NORM}')
+    plt.title(f'New Alg Naive Depth Norm L{P_NORM}')
 
     print(f"Calculate smooth depth of ssd norm L{P_NORM}")
     tt = tic()
-    label_smooth_dp = bon.dp_labeling(my_ssdd, K, POW)
-    print(f"Bonus Dynamic Programming done in {toc(tt):.4f}[seconds]")
+    label_smooth_dp = alg.dp_labeling(my_ssdd, K, POW)
+    print(f"New Alg Dynamic Programming done in {toc(tt):.4f}[seconds]")
 
     # plot the left image and the estimated depth
     plt.figure()
@@ -262,10 +262,10 @@ def bonus():
     plt.subplot(1, 2, 2)
     plt.imshow(label_smooth_dp)
     plt.colorbar()
-    plt.title(f'Bonus Smooth Depth Norm L{P_NORM}- DP')
+    plt.title(f'New Alg Smooth Depth Norm L{P_NORM}- DP')
 
     # ssdd = my_ssdd
-    print(f"############### Start Bonus Part 2 ###############")
+    print(f"############### Start New Alg Part 2 ###############")
     print(f"Calculate ssd distance by given method")
     tt = tic()
     ssdd = solution.ssd_distance(left_image.astype(np.float64),
@@ -275,8 +275,8 @@ def bonus():
     print(f"Normal SSDD calculation done in {toc(tt):.4f}[seconds]")
     print(f"Calculate DP smooth depth using new method")
     tt = tic()
-    label_smooth_dp = bon.dp_labeling(ssdd, K, POW)
-    print(f"Bonus Dynamic Programming done in {toc(tt):.4f}[seconds]")
+    label_smooth_dp = alg.dp_labeling(ssdd, K, POW)
+    print(f"New Alg Dynamic Programming done in {toc(tt):.4f}[seconds]")
 
     # plot the left image and the estimated depth
     plt.figure()
@@ -286,13 +286,13 @@ def bonus():
     plt.subplot(1, 2, 2)
     plt.imshow(label_smooth_dp)
     plt.colorbar()
-    plt.title('Bonus New Smooth Depth - DP')
+    plt.title('New Alg Smooth Depth - DP')
 
     print(f"Calculate SGM using new method")
     tt = tic()
     # label_smooth_sgm = solution.sgm_labeling(ssdd, COST1, COST2)
-    label_smooth_sgm = bon.sgm_labeling(ssdd, K, POW)
-    print(f"Bonus SGM done in {toc(tt):.4f}[seconds]")
+    label_smooth_sgm = alg.sgm_labeling(ssdd, K, POW)
+    print(f"New Alg SGM done in {toc(tt):.4f}[seconds]")
 
     # Plot Semi-Global Mapping result:
     plt.figure()
@@ -302,11 +302,11 @@ def bonus():
     plt.subplot(1, 2, 2)
     plt.imshow(label_smooth_sgm)
     plt.colorbar()
-    plt.title('Bonus New Smooth Depth - SGM')
+    plt.title('New Alg Smooth Depth - SGM')
 
     plt.show()
 
 
 if __name__ == "__main__":
     main()
-    # bonus()
+    # new_algorithm()
