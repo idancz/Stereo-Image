@@ -258,7 +258,7 @@ class Algorithms:
         return Algorithms.naive_labeling(l/num_of_directions)
 
 
-class Bonus:
+class MyAlg:
     def __init__(self):
         pass
 
@@ -323,7 +323,7 @@ class Bonus:
         for r in Algorithms.get_score_route(h, w, direction):
             extracted_slice = Algorithms.extract_slice_by_direction(ssdd_tensor, r, direction)
             position = np.arange(extracted_slice.shape[1])
-            score = Bonus.dp_grade_slice(extracted_slice, k, p)
+            score = MyAlg.dp_grade_slice(extracted_slice, k, p)
             if direction > 4:
                 score = np.fliplr(score)
             if direction % 4 == 0:
@@ -346,7 +346,7 @@ class Bonus:
     def dp_labeling(self, ssdd_tensor: np.ndarray, k: float, p: float) -> np.ndarray:
         l = np.zeros_like(ssdd_tensor)
         for row in range(ssdd_tensor.shape[0]):
-            l[row] = Bonus.dp_grade_slice(ssdd_tensor[row].T, k, p).T
+            l[row] = MyAlg.dp_grade_slice(ssdd_tensor[row].T, k, p).T
         return Algorithms.naive_labeling(l)
 
     def dp_labeling_per_direction(self, ssdd_tensor: np.ndarray, k: float, p: float) -> dict:
@@ -354,14 +354,14 @@ class Bonus:
         l = np.zeros_like(ssdd_tensor)
         direction_to_slice = {}
         for i in range(1, num_of_directions + 1):
-            direction_to_slice[i] = Algorithms.naive_labeling(Bonus.calculate_score_per_direction(ssdd_tensor, i, k, p))
+            direction_to_slice[i] = Algorithms.naive_labeling(MyAlg.calculate_score_per_direction(ssdd_tensor, i, k, p))
         return direction_to_slice
 
     def sgm_labeling(self, ssdd_tensor: np.ndarray, k: float, p: float):
         num_of_directions = 8
         l = np.zeros_like(ssdd_tensor)
         for i in range(1, num_of_directions+1):
-            l += Bonus.calculate_score_per_direction(ssdd_tensor, i, k, p)
+            l += MyAlg.calculate_score_per_direction(ssdd_tensor, i, k, p)
             print(f'L{i} finished')
         return Algorithms.naive_labeling(l/num_of_directions)
 
