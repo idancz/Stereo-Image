@@ -42,6 +42,33 @@ the minimal value of the following items:
 This result is unsurprising due to the semi-global approach (Viterbi algorithm) that take care of the value of close pixels.<br />
 Viterbi assumption based on the idea that each pixel disparity should be close to its neighbor in order to receive smooth result.
 
+## Semi-Global Matching Algorithm
+1.	For each direction we calculated a scored ssdd tensor based on DP (Viterbi algorithm) by the function <br />
+   calculate_score_per_direction(ssdd_tensor, direction, p1, p2)
+      - According to the given direction we are getting the route which contains all the slice indexes of the tensor for a given direction,<br />
+        by the function get_score_route(h, w, direction) 
+         - For each slice index in the route we are extracting the corresponding slice per direction by the function <br /> 
+            extract_slice_by_direction(ssdd_tensor, slice_index, direction)
+         -	Calculate the scored slice based on the Dynamic Programing method.
+         -	Insert the scored slice to the directed score tensor.
+       - Return the scored tensor corresponding to the given direction.
+2.	Compute the average of all scored tensor cross direction.
+3.	Return the argmin label of the scored tensor.
+
+### Depth Map Per Direction
+![image](https://user-images.githubusercontent.com/108329249/178108477-b9fce515-588c-4cc4-bd69-b51053c23ba7.png)
+<br />As you can see, the image for each direction is similar but not exactly the same.<br />
+Moreover, you can see that the color "stretches" by the calculation direction.
+
+### Smooth Depth - SGM (all direction combined)
+![image](https://user-images.githubusercontent.com/108329249/178108585-9a2b2106-5e6a-40f9-a1ba-101fa0a93acd.png)
+<br />As you can see the output is awesome!<br />
+We can reconstruct the lamp, the statue, the camera, and the object on the table.<br />
+However, can lose the information of the library and the background, and we can't see the facial features of the statue.
+
+
+
+
 
 
 
